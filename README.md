@@ -99,7 +99,7 @@ public interface UserFeign {
 	public String delete(@PathVariable("id") Integer id);
 }
 ```
-那么，注意点来了，你的生产者接受对象的话也必须要有@RequestBody，不然会报404
+那么，注意点来了，你的生产者接收对象类型的参数的话，必须要有@RequestBody，不然会报404
 ```
 package com.spoon.controller;
 
@@ -264,4 +264,90 @@ public class User implements Serializable{
 	
 }
 
+```
+## 运行结果
+http://localhost:9001/user/findAll
+```
+2018-11-13 02:07:29.607 DEBUG 11200 --- [nio-7900-exec-3] com.spoon.mapper.UserMapper.selectList   : ==>  Preparing: SELECT id AS id,`name`,birthday,address FROM user 
+2018-11-13 02:07:29.608 DEBUG 11200 --- [nio-7900-exec-3] com.spoon.mapper.UserMapper.selectList   : ==> Parameters: 
+2018-11-13 02:07:29.612 DEBUG 11200 --- [nio-7900-exec-3] com.spoon.mapper.UserMapper.selectList   : <==      Total: 5
+```
+```
+[
+  {
+    "id": 1,
+    "name": "张三",
+    "birthday": -12527251200000,
+    "address": "北京"
+  },
+  {
+    "id": 2,
+    "name": "李四",
+    "birthday": -12086352000000,
+    "address": "上海"
+  },
+  {
+    "id": 3,
+    "name": "王五",
+    "birthday": -12306412800000,
+    "address": "广州"
+  },
+  {
+    "id": 4,
+    "name": "赵六",
+    "birthday": -12748176000000,
+    "address": "深圳"
+  },
+  {
+    "id": 5,
+    "name": "钱七",
+    "birthday": -13000636800000,
+    "address": "厦门"
+  }
+]
+```
+http://localhost:9001/user/find/赵
+```
+2018-11-13 02:08:41.785 DEBUG 11200 --- [nio-7900-exec-5] com.spoon.mapper.UserMapper.selectList   : ==>  Preparing: SELECT id AS id,`name`,birthday,address FROM user WHERE (name LIKE ?) 
+2018-11-13 02:08:41.787 DEBUG 11200 --- [nio-7900-exec-5] com.spoon.mapper.UserMapper.selectList   : ==> Parameters: %赵%(String)
+2018-11-13 02:08:41.790 DEBUG 11200 --- [nio-7900-exec-5] com.spoon.mapper.UserMapper.selectList   : <==      Total: 1
+```
+```
+[
+  {
+    "id": 4,
+    "name": "赵六",
+    "birthday": "-12748176000000",
+    "address": "深圳"
+  }
+]
+```
+http://localhost:9001/user/insert/小美/东莞/1994-05-07
+```
+User [id=null, name=小美, birthday=Sat May 07 08:00:00 CST 1994, address=东莞]
+2018-11-13 02:10:38.077 DEBUG 11200 --- [nio-7900-exec-7] com.spoon.mapper.UserMapper.insert       : ==>  Preparing: INSERT INTO user ( `name`, birthday, address ) VALUES ( ?, ?, ? ) 
+2018-11-13 02:10:38.079 DEBUG 11200 --- [nio-7900-exec-7] com.spoon.mapper.UserMapper.insert       : ==> Parameters: 小美(String), 1994-05-07 08:00:00.0(Timestamp), 东莞(String)
+2018-11-13 02:10:38.086 DEBUG 11200 --- [nio-7900-exec-7] com.spoon.mapper.UserMapper.insert       : <==    Updates: 1
+2018-11-13 02:10:54.357  INFO 11200 --- [trap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+```
+```
+插入成功
+```
+http://localhost:9001/user/update/张三丰/1
+```
+2018-11-13 02:13:17.220 DEBUG 11200 --- [nio-7900-exec-9] com.spoon.mapper.UserMapper.updateById   : ==>  Preparing: UPDATE user SET `name`=? WHERE id=? 
+2018-11-13 02:13:17.223 DEBUG 11200 --- [nio-7900-exec-9] com.spoon.mapper.UserMapper.updateById   : ==> Parameters: 张三丰(String), 1(Integer)
+2018-11-13 02:13:17.231 DEBUG 11200 --- [nio-7900-exec-9] com.spoon.mapper.UserMapper.updateById   : <==    Updates: 1
+```
+```
+修改成功
+```
+http://localhost:9001/user/delete/6
+```
+2018-11-13 02:15:15.096 DEBUG 11200 --- [nio-7900-exec-1] c.s.mapper.UserMapper.deleteBatchIds     : ==>  Preparing: DELETE FROM user WHERE id IN ( ? ) 
+2018-11-13 02:15:15.096 DEBUG 11200 --- [nio-7900-exec-1] c.s.mapper.UserMapper.deleteBatchIds     : ==> Parameters: 6(Integer)
+2018-11-13 02:15:15.101 DEBUG 11200 --- [nio-7900-exec-1] c.s.mapper.UserMapper.deleteBatchIds     : <==    Updates: 1
+```
+```
+删除成功
 ```
