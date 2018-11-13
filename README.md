@@ -1,5 +1,5 @@
-# SpringCloud-Eurka-Provider-Consumer
-SpringCloud-Feign-Eurka-MyBatisPlus
+# SpringCloud-Eureka-Provider-Consumer
+SpringCloud-Feign-Eureka-MyBatisPlus
 
 如果你有SSM的User,那么你可以把它作为提供者，但是你需要添加如下参数
 你需要在application.yml中注册Eurka
